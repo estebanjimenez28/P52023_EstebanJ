@@ -16,5 +16,53 @@ namespace P52023_EstebanJ.Formularios
         {
             InitializeComponent();
         }
+
+        private void FrmUsuariosGestion_Load(object sender, EventArgs e)
+        {
+            //definimos el padre mdi
+            MdiParent = Globales.MiFormPrincipal;
+
+            CargarListaRoles();
+
+
+
+        }
+        private void CargarListaRoles()
+        {
+            Logica.Models.Usuario_Rol MiRol = new Logica.Models.Usuario_Rol();
+
+            DataTable dt = new DataTable();
+            dt = MiRol.Listar();
+
+            if( dt != null && dt.Rows.Count > 0)
+            {
+                CbRolesUsuario.ValueMember = "ID";
+                CbRolesUsuario.DisplayMember = "Descrip";
+                CbRolesUsuario.DataSource = dt;
+                CbRolesUsuario.SelectedIndex = -1;
+            }
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

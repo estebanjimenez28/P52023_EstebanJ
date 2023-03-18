@@ -26,5 +26,18 @@ namespace P52023_EstebanJ.Formularios
         {
 
         }
+
+        private void gestionDeUsuariosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //contro para que el formulario de gestion de usuarios se muestre 
+            //solo una vez
+
+            if (!Globales.MinFormGestionUsuarios.Visible)
+            {
+                Globales.MinFormGestionUsuarios = new FrmUsuariosGestion();
+                Globales.MinFormGestionUsuarios.Show();
+            }
+        }
+        }
     }
-}
+
