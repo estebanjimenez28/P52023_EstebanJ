@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.Windows.Forms;
 
 namespace P52023_EstebanJ
@@ -11,7 +7,8 @@ namespace P52023_EstebanJ
     {
 
 
-        public static FormatException MiFormPrincipal = new Formularios.FrmMDI
+        public static Form MiFormPrincipal = new Formularios.FrmMDI();
+        public static Formularios.FrmUsuariosGestion MinFormGestionUsuarios = new Formularios.FrmUsuariosGestion(); 
     }
 }
 

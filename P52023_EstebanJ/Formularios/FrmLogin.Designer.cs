@@ -35,7 +35,7 @@
             this.BtnIngresar = new System.Windows.Forms.Button();
             this.BtnCancelar = new System.Windows.Forms.Button();
             this.LblRecuperarContrasennia = new System.Windows.Forms.LinkLabel();
-            this.BtnVer = new System.Windows.Forms.Button();
+            this.BtnVerContrasennia = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -118,15 +118,17 @@
             this.LblRecuperarContrasennia.TabStop = true;
             this.LblRecuperarContrasennia.Text = "Recuperar Contraseña";
             // 
-            // BtnVer
+            // BtnVerContrasennia
             // 
-            this.BtnVer.Location = new System.Drawing.Point(379, 385);
-            this.BtnVer.Name = "BtnVer";
-            this.BtnVer.Size = new System.Drawing.Size(46, 30);
-            this.BtnVer.TabIndex = 8;
-            this.BtnVer.Text = "Ver";
-            this.BtnVer.UseVisualStyleBackColor = true;
-            this.BtnVer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnVer_MouseDown_1);
+            this.BtnVerContrasennia.BackColor = System.Drawing.Color.Transparent;
+            this.BtnVerContrasennia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnVerContrasennia.ForeColor = System.Drawing.Color.White;
+            this.BtnVerContrasennia.Location = new System.Drawing.Point(379, 385);
+            this.BtnVerContrasennia.Name = "BtnVerContrasennia";
+            this.BtnVerContrasennia.Size = new System.Drawing.Size(46, 30);
+            this.BtnVerContrasennia.TabIndex = 8;
+            this.BtnVerContrasennia.Text = "Ver";
+            this.BtnVerContrasennia.UseVisualStyleBackColor = false;
             // 
             // pictureBox1
             // 
@@ -144,7 +146,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(437, 552);
-            this.Controls.Add(this.BtnVer);
+            this.Controls.Add(this.BtnVerContrasennia);
             this.Controls.Add(this.LblRecuperarContrasennia);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.BtnCancelar);
@@ -174,6 +176,6 @@
         private System.Windows.Forms.Button BtnCancelar;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.LinkLabel LblRecuperarContrasennia;
-        private System.Windows.Forms.Button BtnVer;
+        private System.Windows.Forms.Button BtnVerContrasennia;
     }
 }

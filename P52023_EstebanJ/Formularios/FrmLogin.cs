@@ -33,15 +33,10 @@ namespace P52023_EstebanJ.Formularios
             TxtContrasennia.UseSystemPasswordChar=true; 
         }
 
-        private void BtnVer_MouseDown_1(object sender, MouseEventArgs e)
-        {
-
-        }
-
         private void BtnIngresar_Click(object sender, EventArgs e)
         {
             //TODO:Se debe validar el usuario
-            Globales.MiFormPrincipal.show();
+            Globales.MiFormPrincipal.Show();
 
             this.Hide();
         }
