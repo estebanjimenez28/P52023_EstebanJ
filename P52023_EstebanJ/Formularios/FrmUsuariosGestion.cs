@@ -54,7 +54,7 @@ namespace P52023_EstebanJ.Formularios
 
             ListaUsuarios = new DataTable();
 
-            if(CboxVerActivos.Checked)
+            if (CboxVerActivos.Checked)
             {
                 ListaUsuarios = MiUsuarioLocal.ListarActivos();
             }
@@ -65,7 +65,7 @@ namespace P52023_EstebanJ.Formularios
             }
 
             DgLista.DataSource = ListaUsuarios;
-            
+
         }
 
 
@@ -76,7 +76,7 @@ namespace P52023_EstebanJ.Formularios
             DataTable dt = new DataTable();
             dt = MiRol.Listar();
 
-            if( dt != null && dt.Rows.Count > 0)
+            if (dt != null && dt.Rows.Count > 0)
             {
                 CbRolesUsuario.ValueMember = "ID";
                 CbRolesUsuario.DisplayMember = "Descrip";
@@ -99,7 +99,7 @@ namespace P52023_EstebanJ.Formularios
             //una fila del datagrid se debe cargar la info de dicho usuario
             // en el usuario local y luego dibujar esa info en los controles graficos
 
-            if(DgLista.SelectedRows.Count ==1)
+            if (DgLista.SelectedRows.Count == 1)
             {
                 //TODO: Limpiar el formulario
 
@@ -127,11 +127,11 @@ namespace P52023_EstebanJ.Formularios
 
                 //validamos que el usuario local tenga datos
 
-                if(MiUsuarioLocal != null && MiUsuarioLocal.UsuarioID > 0)
+                if (MiUsuarioLocal != null && MiUsuarioLocal.UsuarioID > 0)
                 {
                     //si cargamos correctamente el usuario local llenamos los controles
 
-                    TxtUsuarioID.Text =Convert.ToString(MiUsuarioLocal.UsuarioID);
+                    TxtUsuarioID.Text = Convert.ToString(MiUsuarioLocal.UsuarioID);
 
                     TxtUsuarioNombre.Text = MiUsuarioLocal.UsuarioTelefono;
 
@@ -153,6 +153,184 @@ namespace P52023_EstebanJ.Formularios
 
 
             }
+        }
+
+        private void BtnLimpiar_Click(object sender, EventArgs e)
+        {
+            LimpiarFormulario();
+
+        }
+        private void LimpiarFormulario()
+        {
+            TxtUsuarioID.Clear();
+            TxtUsuarioNombre.Clear();
+            TxtUsuarioCedula.Clear();
+            TxtUsuarioTelefono.Clear();
+            TxtUsuarioCorreo.Clear();
+            TxtUsuarioContrasennia.Clear();
+
+            CbRolesUsuario.SelectedIndex = -1;
+
+            TxtUsuarioDireccion.Clear();
+        }
+
+        private bool ValidarDatosDigitados()
+        {
+
+            //evalua que se haya digitado los campos de texto en el formulario
+            bool R = false;
+
+            if (!string.IsNullOrEmpty(TxtUsuarioNombre.Text.Trim()) &&
+                !string.IsNullOrEmpty(TxtUsuarioCedula.Text.Trim()) &&
+                !string.IsNullOrEmpty(TxtUsuarioTelefono.Text.Trim()) &&
+                !string.IsNullOrEmpty(TxtUsuarioCorreo.Text.Trim()) &&
+                !string.IsNullOrEmpty(TxtUsuarioContrasennia.Text.Trim()) &&
+                CbRolesUsuario.SelectedIndex > -1)
+            {
+                R = true;
+            }
+            else
+            {
+                //que pasa cuando algo falta?
+                if (string.IsNullOrEmpty(TxtUsuarioNombre.Text.Trim()))
+                {
+                    MessageBox.Show("Debe digitar un nombre para el usuario", "Error de validacion", MessageBoxButtons.OK);
+                    TxtUsuarioNombre.Focus();
+                    return false;
+
+                    //por cedula
+                }
+                if (string.IsNullOrEmpty(TxtUsuarioCedula.Text.Trim()))
+                {
+                    MessageBox.Show("Debe digitar una cedula para el usuario", "Error de validacion", MessageBoxButtons.OK);
+                    TxtUsuarioCedula.Focus();
+                    return false;
+                }
+                if (string.IsNullOrEmpty(TxtUsuarioTelefono.Text.Trim()))
+                {
+                    MessageBox.Show("Debe digitar un telefono para el usuario", "Error de validacion", MessageBoxButtons.OK);
+                    TxtUsuarioTelefono.Focus();
+                    return false;
+                }
+                if (string.IsNullOrEmpty(TxtUsuarioCorreo.Text.Trim()))
+                {
+                    MessageBox.Show("Debe digitar un correo para el usuario", "Error de validacion", MessageBoxButtons.OK);
+                    TxtUsuarioCorreo.Focus();
+                    return false;
+                }
+                if (string.IsNullOrEmpty(TxtUsuarioContrasennia.Text.Trim()))
+                {
+                    MessageBox.Show("Debe digitar un contraseña para el usuario", "Error de validacion", MessageBoxButtons.OK);
+                    TxtUsuarioContrasennia.Focus();
+                    return false;
+                }
+                if (CbRolesUsuario.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Debe seleccionar un rol para el usuario", "Error de validacion", MessageBoxButtons.OK);
+                    CbRolesUsuario.Focus();
+                    return false;
+                }
+
+            }
+
+
+            return R;
+        }
+
+
+
+
+
+
+
+        private void BtnAgregar_Click(object sender, EventArgs e)
+        {
+
+            if (ValidarDatosDigitados())
+            {
+
+
+
+
+                //estas variables almacenan el resultado de las consultas por correo y cedula
+                bool CedulaOK;
+                bool EmailOK;
+
+                //pasos 1.1 y 1.2
+
+                MiUsuarioLocal = new Logica.Models.Usuario();
+
+
+
+                //llenar los valores de los atributos con los datos digitados en el form
+                MiUsuarioLocal.UsuarioNombre = TxtUsuarioNombre.Text.Trim();
+                MiUsuarioLocal.UsuarioCedula = TxtUsuarioCedula.Text.Trim();
+                MiUsuarioLocal.UsuarioTelefono = TxtUsuarioTelefono.Text.Trim();
+                MiUsuarioLocal.UsuarioCorreo = TxtUsuarioCorreo.Text.Trim();
+                MiUsuarioLocal.UsuarioContrasennia = TxtUsuarioContrasennia.Text.Trim();
+
+                //composicion del rol
+                MiUsuarioLocal.MiRolTipo.UsuarioRolID = Convert.ToInt32(CbRolesUsuario.SelectedValue);
+
+                MiUsuarioLocal.UsuarioDireccion = TxtUsuarioDireccion.Text.Trim();
+
+                //Realizar las consultas por email y por cedula
+                //pasos 1.3 y 1.3.6
+                CedulaOK = MiUsuarioLocal.ConsultarPorCedula();
+
+                //pasos 1.4 y 1.4.6
+                EmailOK = MiUsuarioLocal.ConsultarPorEmail();
+
+                //paso 1.5
+                if (CedulaOK == false && EmailOK == false)
+                {
+                    //se puede agregar el usuario ya que no existe un usuario con la cedula y correo
+                    //digitados
+
+                    //se solicita al usuario confirmacion de si se quiere agregar o no al usuario
+
+                    string msg = string.Format("Esta seguro que desea agregar al usuario {0}?", MiUsuarioLocal.UsuarioNombre);
+
+                    DialogResult respuesta = MessageBox.Show(msg, "???", MessageBoxButtons.YesNo);
+                    if (respuesta == DialogResult.Yes)
+                    {
+                        bool ok = MiUsuarioLocal.Agregar();
+                        if (ok)
+                        {
+                            MessageBox.Show("Usuario guardado correctamente!", ":)", MessageBoxButtons.OK);
+                            LimpiarFormulario();
+
+                            CargarListaDeUsuarios();
+                        }
+                        else
+                        {
+                            MessageBox.Show("El usuario no se pudo guradar!", ":/", MessageBoxButtons.OK);
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (CedulaOK)
+                    {
+                        MessageBox.Show("Ya existe un usuario con la cedula digitada", "Error de validacion", MessageBoxButtons.OK);
+                        return;
+                    }
+                    if (EmailOK)
+                    {
+                        MessageBox.Show("Ya existe un correo con la cedula digitada", "Error de validacion", MessageBoxButtons.OK);
+                        return;
+                    }
+
+
+                }
+
+
+
+
+            }
+
+
         }
     }
 }
