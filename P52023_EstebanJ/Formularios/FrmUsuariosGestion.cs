@@ -44,6 +44,9 @@ namespace P52023_EstebanJ.Formularios
 
             CargarListaDeUsuarios();
 
+            ActivarAgregar();
+
+
 
 
         }
@@ -90,7 +93,20 @@ namespace P52023_EstebanJ.Formularios
         private void DgLista_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             DgLista.ClearSelection();
+        }
+            private void ActivarAgregar()
+            {
+                BtnAgregar.Enabled = true;
+                BtnModificar.Enabled = false;
+                BtnEliminar.Enabled = false;
+            }
 
+            private void ActivarEditarEliminar()
+            {
+                BtnAgregar.Enabled = false;
+                BtnModificar.Enabled = true;
+                BtnEliminar.Enabled = true;
+            }
         }
 
         private void DgLista_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -101,7 +117,7 @@ namespace P52023_EstebanJ.Formularios
 
             if (DgLista.SelectedRows.Count == 1)
             {
-                //TODO: Limpiar el formulario
+                LimpiarFormulario();
 
                 //de la coleccion de filas seleccionadas(que en este caso es solo una)
 
@@ -144,7 +160,7 @@ namespace P52023_EstebanJ.Formularios
                     CbRolesUsuario.SelectedValue = MiUsuarioLocal.MiRolTipo.UsuarioRolID;
 
 
-                    //TODO: Desactivar botones que no son necesarios en este caso el de Agregar 
+                    ActivarEditarEliminar();
 
 
 
@@ -158,6 +174,8 @@ namespace P52023_EstebanJ.Formularios
         private void BtnLimpiar_Click(object sender, EventArgs e)
         {
             LimpiarFormulario();
+            DgLista.ClearSelection();
+            ActivarAgregar();
 
         }
         private void LimpiarFormulario()
@@ -174,7 +192,7 @@ namespace P52023_EstebanJ.Formularios
             TxtUsuarioDireccion.Clear();
         }
 
-        private bool ValidarDatosDigitados()
+        private bool ValidarDatosDigitados(bool OmitirPassword = false)
         {
 
             //evalua que se haya digitado los campos de texto en el formulario
@@ -184,10 +202,37 @@ namespace P52023_EstebanJ.Formularios
                 !string.IsNullOrEmpty(TxtUsuarioCedula.Text.Trim()) &&
                 !string.IsNullOrEmpty(TxtUsuarioTelefono.Text.Trim()) &&
                 !string.IsNullOrEmpty(TxtUsuarioCorreo.Text.Trim()) &&
-                !string.IsNullOrEmpty(TxtUsuarioContrasennia.Text.Trim()) &&
+                
                 CbRolesUsuario.SelectedIndex > -1)
             {
+
+            if(OmitirPassword) 
+            {
+                //Si el password se omite entonces ya paso la evalucion a este punto, retorna true
                 R = true;
+            }
+            else
+            {
+                //en este caso en el que haya que evaluar la contrasena se debe agregar otra
+                //logica
+                if(!string.IsNullOrEmpty(TxtUsuarioContrasennia.Text.Trim()) &&)
+                {
+                    R = true;   
+
+                }
+                else
+                {
+                    MessageBox.Show("Debe digitar un contraseña para el usuario", "Error de validacion", MessageBoxButtons.OK);
+                    TxtUsuarioContrasennia.Focus();
+                    return false;
+                }
+                        
+                        
+                        
+                 }
+
+         
+
             }
             else
             {
@@ -220,9 +265,7 @@ namespace P52023_EstebanJ.Formularios
                 }
                 if (string.IsNullOrEmpty(TxtUsuarioContrasennia.Text.Trim()))
                 {
-                    MessageBox.Show("Debe digitar un contraseña para el usuario", "Error de validacion", MessageBoxButtons.OK);
-                    TxtUsuarioContrasennia.Focus();
-                    return false;
+                    
                 }
                 if (CbRolesUsuario.SelectedIndex == -1)
                 {
@@ -332,5 +375,67 @@ namespace P52023_EstebanJ.Formularios
 
 
         }
+
+    private void BtnModificar_Click(object sender,EventArgs e )
+    {
+        if(ValidarDatosDigitados(true))
+        {
+
+            MiUsuarioLocal.UsuarioNombre = TxtxUsuarioNombre.Text.Trim();
+            MiUsuarioLocal.UsuarioCedula = TxtxUsuarioCedula.Text.Trim();
+            MiUsuarioLocal.UsuarioTelefono = TxtxUsuarioTelefono.Text.Trim();
+            MiUsuarioLocal.UsuarioCorreo = TxtxUsuarioCorreo.Text.Trim();
+
+
+            MiUsuarioLocal.UsuarioCotrasennia = TxtxUsuarioContrasenia.Text.Trim();
+
+            MiUsuarioLocal.MiRolTipo.UsuarioRolID = Convert.ToInt32(CbRolesUsuario.SelectedValue);
+
+            MiUsuarioLocal.UsuarioDireccion = TxtUsuarioDireccion.Text.Trim();
+
+
+            if(MiUsuarioLocal.ConsultarPorID())
+            {
+                DialogResult respuesta = MessageBox.Show("Esta seguro de modificar el usuario?", "???", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if(respuesta == DialogResult.Yes)
+                {
+                    if(MiUsuarioLocal.Editar())
+                    {
+                        MessageBox.Show("El usuario ha sido modificado correctamente", ":)", MessageBoxButtons.OK);
+
+                        LimpiarFormulario();
+                        CargarListaDeUsuarios();
+                    }
+                }
+            }
+        }
+    }
+    private void BtnEliminar_Click(object sender,EventArgs e)
+    {
+        if(MiUsuarioLocal.UsuarioID >0 && MiUsuarioLocal.ConsultarPorID())
+        {
+            if(CboxVerActivos.checked)
+                    {
+                    //DESACTIVAR USUARIO
+                    DialogResult r = MessageBox.Show("Esta seguro de eliminar al usuario?","???",MessageBoxButtons.YesNo,Mes)
+                if(r == DialogResult.Yes)
+                    {
+                        if(MiUsuarioLocal.Eliminar())
+                        {
+                            MessageBox.Show("El usuario ha sido eliminado correctamente", "!!!", MessageBoxButtons.OK);
+                            LimpiarFormulario();
+                            CargarListaDeUsuarios();
+                        }
+                    }
+                        
+                        }
+                else
+                {
+                    //ACTIVAR USUARIO
+
+                }
+        }
+    }
     }
 }
